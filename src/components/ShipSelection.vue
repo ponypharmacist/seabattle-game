@@ -20,8 +20,8 @@
 
     .utility-buttons
       .utility-button.rotate-button(@click="toggleOrientation()")
-      .utility-button.reset-button(@click="resetPlacement()") Сброс
-      .utility-button.done-button(@click="donePlacing()") Готово! 
+      .utility-button.reset-button(@click="resetPlacement()") Reset
+      .utility-button.done-button(@click="donePlacing()") Ready! 
       // Transition game phase pO, rT, pT, rO
 
 </template>
@@ -66,7 +66,7 @@ export default {
 
     donePlacing () {
       if (this.getShipsAvailableAll !== 0) {
-        this.sendAlertMessage('Капитан, в этой битве нам понадобятся все корабли! Спусти же их на воду.')
+        this.sendAlertMessage('Captain, we\'re gonna need all the ships in this battle! Launch all of them.')
       } else {
         this.advanceGamePhase()
       }
@@ -89,7 +89,7 @@ $vw-unit: $size-vertical / 100 * 1.333
   flex-direction: column
   width: $vw-unit * 50
   height: $vw-unit * 45
-  bottom: $vw-unit * 9.5
+  bottom: $vw-unit * 10.75
   right: $vw-unit * -50
   padding: $vw-unit * 3 $vw-unit * 5
   background: transparent url('../assets/book.svg') no-repeat 50% 50% / cover
@@ -174,9 +174,10 @@ $vw-unit: $size-vertical / 100 * 1.333
   justify-content: center
 
 .utility-button
-  padding: $vw-unit * 1.5 $vw-unit * 2
+  padding: $vw-unit * 1.25 $vw-unit * 1.75
   margin: 0 $vw-unit * 2 0 0
   border-radius: $vw-unit
+  font-size: $vw-unit * 2
   text-align: center
   font-weight: bold
   color: #fff

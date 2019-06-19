@@ -4,30 +4,30 @@
     #ready-player-one
       .splash-screen-title 
         span {{ this.$store.state.playerOne.name }}
-        | , готовься к бою! Враг не дремлет...
-      .ready-button(@click="advanceGamePhase()") 1к чертей!
+        | , ready for battle! Yer foe be near...
+      .ready-button(@click="advanceGamePhase()") Harr-harr!
     #ready-player-two
       .splash-screen-title 
         span {{ this.$store.state.playerTwo.name }}
-        | , они оскорбили твою бороду!
+        | , they've insulted yer&nbsp;beard!
         br
-        | Отмой позор кровью!
-      .ready-button(@click="setShipType('big'), advanceGamePhase()") Яррр!
+        | Adorn it with their blood and&nbsp;tears!
+      .ready-button(@click="setShipType('big'), advanceGamePhase()") Yarrr!
     #game-menu
-      .new-game-button(@click="advanceGamePhase()") Готовь пушки!
+      .new-game-button(@click="advanceGamePhase()") Man the harpoons!
     #settings-menu(:class="{ show: this.$store.state.showSettings }")
       .settings-close(@click="this.toggleSettings") ×
-      .settings-title Настроечки
+      .settings-title Settings
 
       .settings-item
-        .settings-item-label Портрет капитана "{{ this.$store.state.playerOne.name }}" (URL)
+        .settings-item-label Portrait of the sly "{{ this.$store.state.playerOne.name }}" (URL)
         input.settings-item-input(:value="this.$store.state.playerOne.imageUrl" @input="this.newImageOne")
 
       .settings-item
-        .settings-item-label Портрет капитана "{{ this.$store.state.playerTwo.name }}" (URL)
+        .settings-item-label Portrait of the cunning "{{ this.$store.state.playerTwo.name }}" (URL)
         input.settings-item-input(:value="this.$store.state.playerTwo.imageUrl" @input="this.newImageTwo")
 
-      a.settings-clear-localstorage(@click="clearLocalStorage()") Сбросить имена и юзерпики
+      a.settings-clear-localstorage(@click="clearLocalStorage()") Reset user names and portraits
 
 </template>
 
@@ -65,7 +65,7 @@ export default {
       localStorage.removeItem('TenShipsPlayerOneImage')
       localStorage.removeItem('TenShipsPlayerTwoImage')
       this.removeAvatars()
-      this.sendAlertMessage('Локальное хранилище очищено.')
+      this.sendAlertMessage('Local storage has been pillaged clean.')
     },
     newImageOne (e) {
       this.updateImageUrlOne(e)

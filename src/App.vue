@@ -4,7 +4,7 @@
     SplashScreen
 
     CharacterBar
-    #go-button(@click="advanceGamePhase()") Go!
+    #go-button(@click="endTurn()") Go!
     #settings(@click="toggleSettings()") ⚙️
     #alerts {{ this.$store.state.alertMessage }}
 
@@ -62,12 +62,21 @@ export default {
       'advanceGamePhase',
       'loadLocalData',
     ]),
+    endTurn () {
+      if (this.$store.state.currentPhase == 'goPlayerOne' || this.$store.state.currentPhase == 'goPlayerTwo') {
+        this.advanceGamePhase()
+      }
+    }
   },
 
   created () {
     this.loadLocalData()
     this.populateFieldByPlayer('playerOne')
     this.populateFieldByPlayer('playerTwo')
+  },
+
+  mounted () {
+    window.scrollTo(0,1)
   },
 
 }

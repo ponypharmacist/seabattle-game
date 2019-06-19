@@ -38,37 +38,39 @@ export default {
       'placeDeadTiles',
       'reduceShotsAvailable',
       'setLastShot',
+      'addToLastShots',
     ]),
 
     fireCannon (row, col) {
-      let alertResult = 'Мимо.'
+      let alertResult = 'You\'ve missed.'
       // 0. Check if any shots left for this turn
       if (!this.isShotsLeft) {
-        alertResult = 'Пиратский бюджет позволяет тратить лишь одну бомбу в ход, капитан.'
+        alertResult = 'Pirate budget allows only one shot per turn, captain.'
         this.sendAlertMessage(alertResult)
         return
       }
       // 0. Place a mine mark
       if ( this.opponentFieldCheck(row, col, 'mine') || this.opponentFieldCheck(row, col, 'dead') ) {
-        alertResult = 'Сюда мы уже стреляли, капитан.'
+        alertResult = 'We\'ve already shot here, captain.'
       } else {
         this.placeMine({row: row, col: col})
         this.reduceShotsAvailable()
         this.setLastShot({row: row + 1, col: col + 1})
+        this.addToLastShots({row: row, col: col})
       }
       // 1. Is this a hit?
       if ( this.opponentFieldCheck(row, col, 'ship') ) {
         // 2. Mark ship as isDamaged
         this.markShipDamaged({row: row, col: col})
-        alertResult = 'Вражеский корабль поражен!'
+        alertResult = 'Enemy ship hit!'
         // 3. Is this ship completely dead?
         let damagedShip = this.getDamagedShip(row, col)
         if ( this.isShipDead(damagedShip) ) {
           this.markShipDead(damagedShip)
           this.placeDeadTiles(damagedShip)
-          alertResult = 'Вражеский корабль потоплен! Насилуйте сундуки и вскрывайте девок!'
+          alertResult = 'Enemy ship down! Rape the treasure and pillage the ladies!'
           if ( this.checkWinCondition ) {
-            alertResult = 'Все враги повержены. Ты - самый крутой пират этих морей, капитан!'
+            alertResult = 'All yer foes r ded. Ye be da best captn in these waters!'
           }
         }
       }

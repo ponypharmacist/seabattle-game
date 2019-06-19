@@ -18,11 +18,12 @@ export default new Vuex.Store({
     showSettings: false,
 
     playerOne: {
-      name: 'Лихая Русалка',
+      name: 'Spunky Mermaid',
       imageUrl: '',
       movesAvailable: 1,
       shotsAvailable: 1,
       lastShot: '',
+      lastShots: [],
       availableShips: {
         big: 1,
         medium: 2,
@@ -34,11 +35,12 @@ export default new Vuex.Store({
     },
 
     playerTwo: {
-      name: 'Волчья Голова',
+      name: 'Salty Sea Dog',
       imageUrl: '',
       movesAvailable: 1,
       shotsAvailable: 1,
       lastShot: '',
+      lastShots: [],
       availableShips: {
         big: 1,
         medium: 2,
@@ -104,6 +106,10 @@ export default new Vuex.Store({
 
     opponentFieldCheck: (state) => (row, col, item) => {
       return state[state.opponent].field[row][col][item]
+    },
+
+    getLastShotsHighlights: (state) => {
+      return state[state.opponent].lastShots
     },
 
     isControlDisabled: (state) => (row, col, size, direction) => {
@@ -212,8 +218,8 @@ export default new Vuex.Store({
       localStorage.setItem('TenShipsPlayerTwoImage', JSON.stringify(state.playerTwo.imageUrl))
     },
     removeAvatars (state) {
-      state.playerOne.name = 'Лихая Русалка'
-      state.playerTwo.name = 'Волчья Голова'
+      state.playerOne.name = 'Spunky Mermaid'
+      state.playerTwo.name = 'Salty Sea Dog'
       state.playerOne.imageUrl = ''
       state.playerTwo.imageUrl = ''
     },
@@ -251,6 +257,13 @@ export default new Vuex.Store({
         case 10: coordinateLetter = 'J'; break
       }
       state[state.currentPlayer].lastShot = coordinateLetter + coordinates.row
+    },
+
+    addToLastShots (state, coordinates) {
+      if (state[state.currentPlayer].lastShots.length >= 3) {
+        state[state.currentPlayer].lastShots.pop()
+      }
+      state[state.currentPlayer].lastShots.unshift({col: coordinates.col, row: coordinates.row})
     },
 
     reduceMovesAvailable (state) {
@@ -438,9 +451,9 @@ export default new Vuex.Store({
           context.state.opponent = 'playerTwo'
           context.state.currentPhase = 'goPlayerOne'
           context.state.turnCount++
-          context.state.alertMessage = 'Шел ' + context.state.turnCount + '-й день сражений. '
+          context.state.alertMessage = 'It was day ' + context.state.turnCount + ' of the deadly struggle. '
           if (context.state[context.state.opponent].lastShot) {
-            context.state.alertMessage += context.state[context.state.opponent].name + ' шлет привет в сектор ' + context.state[context.state.opponent].lastShot + '.'
+            context.state.alertMessage += context.state[context.state.opponent].name + ' made their move in sector ' + context.state[context.state.opponent].lastShot + '.'
           }
           context.state[context.state.currentPlayer].movesAvailable = 1
           context.state[context.state.currentPlayer].shotsAvailable = 1
@@ -453,9 +466,9 @@ export default new Vuex.Store({
             context.state.currentPhase = 'goPlayerTwo'
             context.state[context.state.currentPlayer].movesAvailable = 1
             context.state[context.state.currentPlayer].shotsAvailable = 1
-            context.state.alertMessage = 'Шел ' + context.state.turnCount + '-й день сражений. '
+            context.state.alertMessage = 'It was day ' + context.state.turnCount + ' of the deadly struggle. '
             if (context.state[context.state.opponent].lastShot) {
-              context.state.alertMessage += context.state[context.state.opponent].name + ' шлет привет в сектор ' + context.state[context.state.opponent].lastShot + '.'
+              context.state.alertMessage += context.state[context.state.opponent].name + ' made their move in sector ' + context.state[context.state.opponent].lastShot + '.'
             }
           } else {
           context.state.currentPhase = 'placeShipsTwo'

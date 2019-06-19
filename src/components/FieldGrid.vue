@@ -12,6 +12,10 @@
         div(v-for="(cell, indexCell) in row"
             :class="{ isShip: cell.ship, mine: cell.mine }")
 
+      section.last-shots-highlights
+        .highlight(v-for="(lastShot, indexShot) in  this.getLastShotsHighlights"
+                    :style="{ left: (lastShot.col * 10) + '%', top: (lastShot.row * 10) + '%' }")
+
 </template>
 
 <script>
@@ -31,6 +35,7 @@ export default {
       'isTileForbidden',
       'isTileShip',
       'opponentFieldCheck',
+      'getLastShotsHighlights',
     ]),
   },
 
@@ -49,10 +54,10 @@ export default {
       let type = this.$store.state.shipPlaceType
       // Check if there are available ships of selected type
       if ( this.getShipsAvailableAll <= 0 ) {
-        this.sendAlertMessage('Все корабли запущены. Пора идти в атаку.')
+        this.sendAlertMessage('All ships are ready. Let\'s tickle their bellies with iron!')
         return
       } else if ( this.getShipsAvailableByType(type) <= 0 ) {
-        this.sendAlertMessage('Таких кораблей больше нет. Пиратский бюджет, крюком его по япкам!')
+        this.sendAlertMessage('No more ships of this class. The pirate budget, damn it!')
         this.switchShipButtons(type)
         return
       }
@@ -156,14 +161,14 @@ export default {
       }
       // 1. Check if ship sticks outside the board
       if (shipEnd.col > 9 || shipEnd.row > 9) {
-        this.sendAlertMessage('Корабль никак не может торчать за картой!')
+        this.sendAlertMessage('Can not stick ship outside the map!')
         return false
       }
       // 2. Check if ship tiles will cross with forbidden
       // 2.1. Check each ship tile against forbidden cells and ship cells
       for (let tile of shipTiles) {
         if ( this.isTileForbidden(tile.row, tile.col) || this.isTileShip(tile.row, tile.col) ) {
-          this.sendAlertMessage('Таранить будем чужие корабли, свои не надо.')
+          this.sendAlertMessage('You should ram enemy ships, not ours, Cap.')
           return false
         }
       }
@@ -171,7 +176,7 @@ export default {
     },
 
     printForbidden () {
-      this.sendAlertMessage('Тут уже что-то есть!')
+      this.sendAlertMessage('There is already something there!')
     },
   }
 
@@ -287,5 +292,25 @@ $ship-unit: $vh-unit * 4.4 * 1.333
   width: $ship-unit
   height: $ship-unit
   background-image: url('../assets/place-ship-1.svg')
+
+// Last shots highlight
+.last-shots-highlights
+  position: absolute
+  width: calc(100% - 2px)
+  height: calc(100% - 2px)
+
+.highlight
+  position: absolute
+  width: calc(10% - 2px)
+  height: calc(10% - 2px)
+  border-radius: 50%
+  display: block
+  border: 5px solid rgba(255, 0, 55, 0.5)
+
+.highlight:nth-child(2)
+  border: 5px solid rgba(255, 0, 55, 0.33)
+
+.highlight:nth-child(3)
+  border: 5px solid rgba(255, 0, 55, 0.1)
 
 </style>
